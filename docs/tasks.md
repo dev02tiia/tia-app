@@ -146,17 +146,19 @@ Responsabilidade:
 - Avaliar se a questão gerada é juridicamente consistente
 - Verificar se há apenas uma alternativa correta
 - Verificar se a resposta está sustentada na base legal
-- Rejeitar questões ambíguas, inventadas ou mal formuladas
+- Rejeitar questões apenas por erro crítico (gabarito errado, invenção de lei, sem base legal)
+- Aprovar com sugestões questões corretas com pequenas melhorias de redação
 
 Status:
 
 - [x] Implementado
 - [x] Validador consegue reprovar questões fracas
-- [x] Validador retorna `approved`, `issues`, `confidence` e `comment`
-- [ ] Ajustar para aprovar questões boas com pequenas sugestões
-- [ ] Adicionar campo `suggestions`
-- [ ] Separar problemas críticos de melhorias de redação
-- [ ] Criar critérios objetivos de aprovação/reprovação
+- [x] Validador retorna `approved`, `critical_issues`, `suggestions`, `confidence` e `comment`
+- [x] Campo `issues` mantido como alias de `critical_issues` para compatibilidade
+- [x] Prompt ajustado: reprova somente por erro crítico; melhorias vão em `suggestions`
+- [x] Critérios objetivos de aprovação/reprovação documentados em `docs/agents.md`
+- [ ] Criar logs dos motivos de reprovação
+- [ ] Criar campo `severity` por item
 
 ---
 
@@ -211,9 +213,9 @@ Criar uma planilha ou JSON com:
 ### Curto prazo
 
 - [ ] Melhorar prompts do gerador
-- [ ] Melhorar prompts do validador
+- [x] Melhorar prompts do validador
 - [ ] Melhorar prompts do explicador
-- [ ] Adicionar campo `suggestions` na validação
+- [x] Adicionar campo `suggestions` na validação
 - [ ] Criar `docs/pipeline.md`
 - [ ] Criar `docs/architecture.md`
 - [ ] Criar `docs/prompts.md`

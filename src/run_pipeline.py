@@ -124,16 +124,21 @@ def run(
 
     approved: bool = validation.get("approved", False)
     confidence: float = validation.get("confidence", 0.0)
-    issues: list[str] = validation.get("issues", [])
+    issues: list[str] = validation.get("critical_issues", validation.get("issues", []))
+    suggestions: list[str] = validation.get("suggestions", [])
 
     status_color = "green" if approved else "red"
     status_label = "APROVADA" if approved else "REPROVADA"
     console.print(f"  Status: [{status_color}]{status_label}[/{status_color}]  "
                   f"| Confianca: {confidence:.0%}")
     if issues:
-        console.print("  Problemas encontrados:")
+        console.print("  Erros criticos:")
         for issue in issues:
-            console.print(f"    [yellow]- {issue}[/yellow]")
+            console.print(f"    [red]- {issue}[/red]")
+    if suggestions:
+        console.print("  Sugestoes de melhoria:")
+        for s in suggestions:
+            console.print(f"    [yellow]- {s}[/yellow]")
 
     # 5. Branch on approval
     if not approved:

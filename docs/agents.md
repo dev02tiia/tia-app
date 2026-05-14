@@ -132,65 +132,65 @@ Exemplo de entrada:
 Campos esperados:
 
 - `approved`
-- `issues`
+- `critical_issues`
 - `suggestions`
 - `confidence`
 - `comment`
+- `issues` (alias de `critical_issues`, mantido para compatibilidade)
 
 Exemplo de saída:
 
 ```json
 {
   "approved": true,
-  "issues": [],
-  "suggestions": [],
+  "critical_issues": [],
+  "suggestions": ["O enunciado poderia ser mais direto."],
   "confidence": 0.95,
   "comment": "Questão aprovada com base no art. X."
 }
 ```
 
-### Critérios de aprovação
+### Regra principal
 
-A questão deve ser aprovada quando:
+Aprovar sempre que o gabarito estiver correto, houver uma única alternativa correta e a resposta estiver sustentada na base legal. Melhorias de redação vão em `suggestions`, nunca em `critical_issues`.
 
-- a resposta correta está sustentada na legislação;
-- há apenas uma alternativa correta;
-- não há fundamento inventado;
-- o enunciado é respondível;
-- as alternativas erradas são incorretas à luz da base.
+### Critérios de aprovação (approved: true)
 
-### Critérios de reprovação
-
-A questão deve ser reprovada quando:
-
-- o gabarito está errado;
-- há mais de uma alternativa correta;
-- não há base legal suficiente;
-- a questão inventa artigo, regra ou consequência;
-- o enunciado é impossível ou muito ambíguo;
-- a questão não corresponde ao tema pedido.
+- O gabarito está correto segundo a legislação fornecida.
+- Há exatamente uma alternativa correta.
+- A resposta correta está sustentada na base legal.
+- Não há artigo, regra ou consequência inventada.
 
 ### Critérios para aprovar com sugestões
 
-A questão pode ser aprovada com sugestões quando:
+A questão é aprovada, mas `suggestions` lista melhorias opcionais:
 
-- o enunciado poderia ser mais claro;
-- as alternativas poderiam ser mais plausíveis;
-- a referência poderia ser melhor formatada;
-- a redação poderia ser mais objetiva.
+- O enunciado poderia ser mais claro.
+- As alternativas incorretas poderiam ser mais plausíveis.
+- A referência poderia ser melhor formatada.
+- A redação poderia ser mais objetiva.
 
-### Problemas observados
+### Critérios de reprovação (approved: false)
 
-O validador às vezes reprova uma questão mesmo reconhecendo que:
+Reprovar somente se houver pelo menos um erro crítico:
 
-- o gabarito está correto;
-- há uma única resposta correta;
-- a questão está baseada na legislação.
+- Gabarito incorreto.
+- Mais de uma alternativa correta.
+- Nenhuma alternativa correta.
+- Resposta correta sem sustentação na base legal.
+- Artigo, regra ou consequência inventada.
+- Enunciado impossível de responder.
+- Questão fora do tema jurídico.
+
+### O que NÃO reprova
+
+- Alternativas incorretas pouco criativas (desde que juridicamente incorretas).
+- Enunciado longo ou indireto.
+- Referências mal formatadas.
+- Falta de elegância na redação.
 
 ### Melhorias planejadas
 
-- Separar `issues` críticos de `suggestions`.
-- Aprovar questões juridicamente corretas mesmo com pequenas melhorias de redação.
 - Criar campo `severity` futuramente.
 - Criar logs dos motivos de reprovação.
 
